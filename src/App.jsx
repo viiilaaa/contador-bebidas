@@ -59,41 +59,56 @@ function App() {
   const bebidasUsuario = bebidas.filter(b => b.uid === usuario.uid)
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-4 border rounded shadow">
-      {/* NAVBAR */}
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-xl font-bold">🍻 Contador de Bebidas</h1>
-        <button onClick={() => signOut(auth)} className="text-sm text-red-600 underline">
-          Cerrar sesión
-        </button>
-      </div>
+    <div className="max-w-md w-full mx-auto mt-6 p-4 border rounded shadow
+                md:max-w-md md:p-4">
+    {/* NAVBAR */}
+    <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-4 gap-2">
+      <h1 className="text-xl font-bold text-center md:text-left">
+        🍻 Contador de Bebidas
+      </h1>
+      <button
+        onClick={() => signOut(auth)}
+        className="text-sm text-red-600 underline md:self-center"
+      >
+        Cerrar sesión
+      </button>
+    </div>
 
-      <div className="flex justify-center gap-4 mb-4">
-        <button
-          onClick={() => setVista("inicio")}
-          className={`px-3 py-1 rounded ${vista === "inicio" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
-        >
-          Inicio
-        </button>
-        <button
-          onClick={() => setVista("global")}
-          className={`px-3 py-1 rounded ${vista === "global" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
-        >
-          Global
-        </button>
-        <button
-          onClick={() => setVista("editar")}
-          className={`px-3 py-1 rounded ${vista === "editar" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
-        >
-          Editar
-        </button>
-        <button
-          onClick={() => setVista("ranking")}
-          className={`px-3 py-1 rounded ${vista === "ranking" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
-        >
-          Ranking
-        </button>
-      </div>
+    <div className="flex flex-wrap justify-center gap-2 mb-4">
+      <button
+        onClick={() => setVista("inicio")}
+        className={`px-3 py-1 rounded min-w-[80px] text-center ${
+          vista === "inicio" ? "bg-blue-500 text-white" : "bg-gray-200"
+        }`}
+      >
+        Inicio
+      </button>
+      <button
+        onClick={() => setVista("global")}
+        className={`px-3 py-1 rounded min-w-[80px] text-center ${
+          vista === "global" ? "bg-blue-500 text-white" : "bg-gray-200"
+        }`}
+      >
+        Global
+      </button>
+      <button
+        onClick={() => setVista("editar")}
+        className={`px-3 py-1 rounded min-w-[80px] text-center ${
+          vista === "editar" ? "bg-blue-500 text-white" : "bg-gray-200"
+        }`}
+      >
+        Editar
+      </button>
+      <button
+        onClick={() => setVista("ranking")}
+        className={`px-3 py-1 rounded min-w-[80px] text-center ${
+          vista === "ranking" ? "bg-blue-500 text-white" : "bg-gray-200"
+        }`}
+      >
+        Ranking
+      </button>
+    </div>
+
 
       {vista === "inicio" && (
         <>

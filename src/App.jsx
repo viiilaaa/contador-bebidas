@@ -25,6 +25,20 @@ function App() {
   const [usuario, setUsuario] = useState(null)
   const [bebidas, setBebidas] = useState([])
   const [vista, setVista] = useState("inicio") // 'inicio' o 'global'
+  const [usuarios, setUsuarios] = useState([])
+
+  useEffect(() => {
+    const q = query(collection(db, "usuarios"))
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const datos = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }))
+      setUsuarios(datos)
+    })
+    return () => unsubscribe()
+  }, [])
+
 
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
@@ -114,7 +128,7 @@ function App() {
 
       {vista === "inicio" && (
         <>
-          <p className="text-sm text-gray-600 mb-2">Bienvenido: <RelUsuName email={usuario.email} /></p>
+          <p className="text-sm text-gray-600 mb-2 text-center">Bienvenido: <RelUsuName email={usuario.email} /></p>
           <BebidaForm onAdd={añadirBebida} />
           <EstadisticasUsuario bebidas={bebidasUsuario} />
         </>
@@ -128,7 +142,7 @@ function App() {
         <EditarGlobal bebidas={bebidas} />
       )}
       {vista === "ranking" && (
-        <Ranking />
+        <Ranking usuarios={usuarios} bebidas={bebidas} />
       )}
     </div>
   )

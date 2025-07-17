@@ -114,7 +114,7 @@ function EstadisticasUsuario({ bebidas }) {
 
   return (
     <div className="mt-6">
-      <h2 className="text-lg font-bold mb-2">📊 Tus estadísticas</h2>
+      <h2 className=" text-center text-lg font-bold mb-2">📊 Tus estadísticas</h2>
       <p>Última bebida: {ultima.tipo} — {new Date(ultima.timestamp).toLocaleTimeString()}</p>
       <p>Bebidas en las últimas {horasLimite}h:</p>
       <ul className="list-disc pl-4 text-sm text-gray-700 mb-2">
@@ -125,12 +125,12 @@ function EstadisticasUsuario({ bebidas }) {
         ))}
       </ul>
 
-      <p className="text-sm mt-4 font-semibold">Bebidas en las últimas 24h (por tipo):</p>
+      <p className="text-center text-sm mt-4 font-semibold">Bebidas en las últimas 24h (por tipo):</p>
       <div className="bg-white rounded p-2 mt-2">
         <Bar data={data} options={options} />
       </div>
 
-      <p className="text-sm mt-4 font-semibold">Bebidas en las últimas 24h (por hora):</p>
+      <p className="text-center text-sm mt-4 font-semibold">Bebidas en las últimas 24h (por hora):</p>
       <div className="bg-white rounded p-2 mt-2">
         <Bar data={dataHoras} options={optionsHoras} />
       </div>

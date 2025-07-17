@@ -16,7 +16,7 @@ function EditarGlobal({ bebidas }) {
       const lista = []
       querySnapshot.forEach(doc => {
         const data = doc.data()
-        lista.push({ uid: doc.id, email: data.email || "Anónimo" })
+        lista.push({ uid: doc.id, email: data.email, Nombre: data.Nombre || "Anónimo" })
       })
       setUsuarios(lista)
     }
@@ -35,8 +35,8 @@ function EditarGlobal({ bebidas }) {
           value={uidSeleccionado}
         >
           <option value="" disabled>-- Selecciona un usuario --</option>
-          {usuarios.map(({ uid, email }) => (
-            <option key={uid} value={uid}>{email}</option>
+          {usuarios.map(({ uid, Nombre, email }) => (
+            <option key={uid} value={uid}>{`${Nombre}`}</option>
           ))}
         </select>
       </div>

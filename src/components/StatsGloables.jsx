@@ -7,7 +7,7 @@ function EstadisticasGlobales({ bebidas, usuarios }) {
 
   return (
     <div className="mt-6">
-      <h2 className="text-lg font-bold mb-2">🌍 Estadísticas Globales</h2>
+      <h2 className="text-center text-lg font-bold mb-2">🌍 Estadísticas Globales</h2>
       {usuarios.map((usuario) => {
         const email = usuario.email
         const lista = bebidas.filter(b => b.email === email)
@@ -30,7 +30,7 @@ function EstadisticasGlobales({ bebidas, usuarios }) {
 
         return (
           <div key={email} className="mb-4 border-b pb-2">
-            <p className="font-semibold"><RelUsuName email={email} /></p>
+            <p className="font-semibold text-xl"><RelUsuName email={email} /></p>
             {ultima ? (
               <>
                 <p className="text-sm text-gray-600">

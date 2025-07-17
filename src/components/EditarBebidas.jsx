@@ -21,7 +21,15 @@ function EditarBebidas({ bebidas, uid, email }) {
   }, {})
 
   // Tipos permitidos, para no tener que sacar del resumen solo
-  const tipos = ["cerveza", "cubata", "chupito"]
+  const tipos = [
+    "cerveza",
+    "chupito",
+    "bacardi-limon",
+    "ron-cola",
+    "ron-naranja",
+    "calimocho"
+  ];
+
 
   // Añadir bebida nueva con timestamp actual
   const añadirBebida = async (tipo) => {
@@ -88,7 +96,7 @@ function EditarBebidas({ bebidas, uid, email }) {
         )
       })}
       {bebidasUsuario.length === 0 && (
-        <p className="text-sm text-gray-600 mt-4">No tienes bebidas registradas.</p>
+        <p className="text-center text-sm text-gray-600 mt-4">No tienes bebidas registradas.</p>
       )}
     </div>
   )

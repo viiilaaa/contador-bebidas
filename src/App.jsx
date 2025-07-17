@@ -39,7 +39,7 @@ function App() {
     return () => unsubscribe()
   }, [])
 
-  console.log("Usuarios:", usuarios)
+
 
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
@@ -130,7 +130,7 @@ function App() {
       {vista === "inicio" && (
         <>
           <p className="text-sm text-gray-600 mb-2 text-center">Bienvenido: <RelUsuName email={usuario.email} /></p>
-          <BebidaForm onAdd={añadirBebida} />
+          <BebidaForm onAdd={añadirBebida} uid={usuario.uid} />
           <EstadisticasUsuario bebidas={bebidasUsuario} />
         </>
       )}

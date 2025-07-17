@@ -11,7 +11,7 @@ import {
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend)
 
 function EstadisticasUsuario({ bebidas }) {
-  if (!bebidas.length) return <p className="mt-4 text-sm">No has añadido bebidas aún.</p>
+  if (!bebidas.length) return <p className="text-center mt-4 text-sm">No has añadido bebidas aún.</p>
 
   const ahora = new Date()
   const horasLimite = 6

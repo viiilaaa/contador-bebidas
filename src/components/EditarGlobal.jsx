@@ -25,7 +25,7 @@ function EditarGlobal({ bebidas }) {
 
   return (
     <div className="mt-6">
-      <h2 className="text-lg font-bold mb-4">🛠 Editar Bebidas Globales (Últimas 24h)</h2>
+      <h2 className="text-center text-lg font-bold mb-4">🛠 Editar Bebidas (Últimas 24h)</h2>
 
       <div className="mb-4">
         <label className="block text-sm font-medium mb-1">Seleccionar usuario:</label>

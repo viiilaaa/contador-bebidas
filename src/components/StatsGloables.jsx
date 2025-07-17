@@ -1,4 +1,6 @@
 import RelUsuName from "./RelUsuName"
+import EditarBebidas from "./EditarBebidas"
+import GraficoPorTipo from "./GraficoPorTipo"
 
 function EstadisticasGlobales({ bebidas }) {
   if (!bebidas.length) return <p>No hay datos aún.</p>
@@ -45,7 +47,9 @@ function EstadisticasGlobales({ bebidas }) {
                 ? `Últimas ${horasLimite}h: ${resumenTexto}`
                 : <span className="italic text-gray-500">Sin datos recientes</span>}
             </p>
+            <GraficoPorTipo bebidas={recientes} />
           </div>
+
         )
       })}
     </div>

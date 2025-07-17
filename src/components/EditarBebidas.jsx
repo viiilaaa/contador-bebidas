@@ -2,7 +2,7 @@ import { useState } from "react"
 import { collection, addDoc, query, where, orderBy, limit, getDocs, deleteDoc, doc } from "firebase/firestore"
 import { db } from "../firebase"
 
-function EditarBebidas({ bebidas, uid }) {
+function EditarBebidas({ bebidas, uid, email }) {
 
   // Filtramos las bebidas solo del usuario
   const ahora = new Date()
@@ -29,6 +29,7 @@ function EditarBebidas({ bebidas, uid }) {
       await addDoc(collection(db, "bebidas"), {
         uid,
         tipo,
+        email,
         timestamp: new Date().toISOString(),
       })
     } catch (error) {

@@ -29,7 +29,6 @@ function EstadisticasUsuario({ bebidas }) {
     return acc
   }, {})
 
-  // Para la gráfica de últimas 24h, calculamos resumen por tipo en las 24h
   const bebidas24h = bebidas.filter(b => {
     const t = new Date(b.timestamp)
     return (ahora - t) / (1000 * 60 * 60) < ultimas24h
@@ -40,7 +39,7 @@ function EstadisticasUsuario({ bebidas }) {
     return acc
   }, {})
 
-  // Datos para gráfica horizontal
+  // Gráfica horizontal por tipo
   const labels = Object.keys(resumen24h)
   const dataValores = Object.values(resumen24h)
 
@@ -57,7 +56,7 @@ function EstadisticasUsuario({ bebidas }) {
   }
 
   const options = {
-    indexAxis: 'y', // Aquí indicamos que sea horizontal
+    indexAxis: 'y',
     scales: {
       x: { beginAtZero: true, ticks: { stepSize: 1 } }
     },
@@ -66,20 +65,37 @@ function EstadisticasUsuario({ bebidas }) {
     }
   }
 
-  // También mantienes la gráfica por horas que ya tenías:
-  const horas = Array.from({ length: 24 }, (_, i) => i)
-  const bebidasPorHora = Array(24).fill(0)
-  bebidas.forEach(b => {
-    const fecha = new Date(b.timestamp)
-    const diffH = (ahora - fecha) / (1000 * 60 * 60)
-    if (diffH < ultimas24h) {
-      const hora = fecha.getHours()
-      bebidasPorHora[hora]++
-    }
+  // Gráfica por hora: últimas 24h reales
+    const now = new Date()
+
+    // Recorta "ahora" a la próxima hora en punto (ej. 11:50 → 12:00)
+    const horaSiguiente = new Date(now)
+    horaSiguiente.setMinutes(0, 0, 0)
+    horaSiguiente.setHours(horaSiguiente.getHours() + 1)
+
+    // Generar bloques de 1 hora desde la próxima hora en punto hacia atrás
+    const bloques = Array.from({ length: 24 }, (_, i) => {
+      const tFin = new Date(horaSiguiente.getTime() - i * 60 * 60 * 1000)
+      const tInicio = new Date(tFin.getTime() - 60 * 60 * 1000)
+      return { tInicio, tFin }
+    }).reverse()
+
+
+
+  const bebidasPorHora = bloques.map(({ tInicio, tFin }) =>
+    bebidas.filter(b => {
+      const t = new Date(b.timestamp)
+      return t >= tInicio && t < tFin
+    }).length
+  )
+
+  const labelsHoras = bloques.map(({ tInicio }) => {
+    const h = tInicio.getHours()
+    return `${h}:00`
   })
 
   const dataHoras = {
-    labels: horas.map(h => `${h}:00`),
+    labels: labelsHoras,
     datasets: [
       {
         label: "Bebidas por hora",
@@ -118,6 +134,7 @@ function EstadisticasUsuario({ bebidas }) {
       <div className="bg-white rounded p-2 mt-2">
         <Bar data={dataHoras} options={optionsHoras} />
       </div>
+
     </div>
   )
 }

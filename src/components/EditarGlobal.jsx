@@ -1,12 +1,27 @@
-import { useState } from "react"
 import EditarBebidas from "./EditarBebidas"
 import RelUsuName from "./RelUsuName"
 
-function EditarGlobal({ bebidas }) {
-  // Obtener todos los uids únicos (sin filtro de últimas 24h)
-  const uidsUnicos = Array.from(new Set(bebidas.map(b => b.uid)))
+import { useState, useEffect } from "react"
+import { getFirestore, collection, getDocs } from "firebase/firestore"
 
+
+function EditarGlobal({ bebidas }) {
+  const [usuarios, setUsuarios] = useState([]) // lista de { uid, email }
   const [uidSeleccionado, setUidSeleccionado] = useState("")
+
+  useEffect(() => {
+    async function fetchUsuarios() {
+      const db = getFirestore()
+      const querySnapshot = await getDocs(collection(db, "usuarios"))
+      const lista = []
+      querySnapshot.forEach(doc => {
+        const data = doc.data()
+        lista.push({ uid: doc.id, email: data.email || "Anónimo" })
+      })
+      setUsuarios(lista)
+    }
+    fetchUsuarios()
+  }, [])
 
   return (
     <div className="mt-6">
@@ -20,20 +35,19 @@ function EditarGlobal({ bebidas }) {
           value={uidSeleccionado}
         >
           <option value="" disabled>-- Selecciona un usuario --</option>
-          {uidsUnicos.map(uid => {
-            const email = bebidas.find(b => b.uid === uid)?.email || "Anónimo"
-            return (
-              <option key={uid} value={uid}>
-                {email}
-              </option>
-            )
-          })}
+          {usuarios.map(({ uid, email }) => (
+            <option key={uid} value={uid}>{email}</option>
+          ))}
         </select>
       </div>
 
       {uidSeleccionado && (
         <div className="mt-4 border-t pt-4">
-          <EditarBebidas bebidas={bebidas} uid={uidSeleccionado} />
+          <EditarBebidas
+            bebidas={bebidas}
+            uid={uidSeleccionado}
+            email={usuarios.find(u => u.uid === uidSeleccionado)?.email || "Anónimo"}
+            />
         </div>
       )}
     </div>

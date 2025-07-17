@@ -1,10 +1,12 @@
+import RelUsuName from "./RelUsuName"
+
 function EstadisticasGlobales({ bebidas }) {
   if (!bebidas.length) return <p>No hay datos aún.</p>
 
   const ahora = new Date()
-  const horasLimite = 6
+  const horasLimite = 24
 
-  // Agrupar bebidas por usuario (email)
+  // Agrupar bebidas por usuario
   const agrupadas = bebidas.reduce((acc, bebida) => {
     const email = bebida.email || "Anónimo"
     if (!acc[email]) acc[email] = []
@@ -22,21 +24,27 @@ function EstadisticasGlobales({ bebidas }) {
           return (ahora - t) / (1000 * 60 * 60) < horasLimite
         })
 
+        // Resumen por tipo
+        const resumen = recientes.reduce((acc, b) => {
+          acc[b.tipo] = (acc[b.tipo] || 0) + 1
+          return acc
+        }, {})
+
+        const resumenTexto = Object.entries(resumen)
+          .map(([tipo, cantidad]) => `${cantidad} ${tipo}${cantidad > 1 ? "s" : ""}`)
+          .join(", ")
+
         return (
           <div key={email} className="mb-4 border-b pb-2">
-            <p className="font-semibold">{email}</p>
+            <p className="font-semibold"><RelUsuName email={email} /></p>
             <p className="text-sm text-gray-600">
               Última bebida: {ultima.tipo} — {new Date(ultima.timestamp).toLocaleTimeString()}
             </p>
-            <p className="text-sm mt-1">Últimas {horasLimite}h:</p>
-            <ul className="text-sm pl-4 list-disc">
-              {recientes.map((b, i) => (
-                <li key={i}>
-                  {b.tipo} — {new Date(b.timestamp).toLocaleTimeString()}
-                </li>
-              ))}
-              {!recientes.length && <li className="italic text-gray-500">Sin datos recientes</li>}
-            </ul>
+            <p className="text-sm mt-1">
+              {recientes.length > 0
+                ? `Últimas ${horasLimite}h: ${resumenTexto}`
+                : <span className="italic text-gray-500">Sin datos recientes</span>}
+            </p>
           </div>
         )
       })}

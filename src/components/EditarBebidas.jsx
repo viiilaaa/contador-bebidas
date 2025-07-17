@@ -1,87 +1,93 @@
-// src/components/EditarBebidas.jsx
 import { useState } from "react"
-import { doc, updateDoc, deleteDoc } from "firebase/firestore"
+import { collection, addDoc, query, where, orderBy, limit, getDocs, deleteDoc, doc } from "firebase/firestore"
 import { db } from "../firebase"
 
 function EditarBebidas({ bebidas, uid }) {
-  const [editandoId, setEditandoId] = useState(null)
-  const [nuevoTipo, setNuevoTipo] = useState("")
 
-  const empezarEdicion = (bebida) => {
-    setEditandoId(bebida.id)
-    setNuevoTipo(bebida.tipo)
+  // Filtramos las bebidas solo del usuario
+  const ahora = new Date()
+  const hace24h = new Date(ahora.getTime() - 24 * 60 * 60 * 1000)
+
+  const bebidasUsuario = bebidas.filter(b => {
+    const fecha = new Date(b.timestamp) // Asegúrate de que `b.timestamp` sea un string ISO o conviértelo si es un objeto Timestamp
+    return b.uid === uid && fecha > hace24h
+  })
+
+
+  // Contamos cuántas de cada tipo
+  const resumenTipos = bebidasUsuario.reduce((acc, b) => {
+    acc[b.tipo] = acc[b.tipo] ? [...acc[b.tipo], b] : [b]
+    return acc
+  }, {})
+
+  // Tipos permitidos, para no tener que sacar del resumen solo
+  const tipos = ["cerveza", "cubata", "chupito"]
+
+  // Añadir bebida nueva con timestamp actual
+  const añadirBebida = async (tipo) => {
+    try {
+      await addDoc(collection(db, "bebidas"), {
+        uid,
+        tipo,
+        timestamp: new Date().toISOString(),
+      })
+    } catch (error) {
+      console.error("Error añadiendo bebida:", error)
+    }
   }
 
-  const guardarCambios = async (id) => {
-    const ref = doc(db, "bebidas", id)
-    await updateDoc(ref, { tipo: nuevoTipo })
-    setEditandoId(null)
+  // Eliminar la última bebida añadida de ese tipo
+  const eliminarUltimaBebida = async (tipo) => {
+    try {
+      // Buscamos la bebida más reciente de ese tipo del usuario
+      const q = query(
+        collection(db, "bebidas"),
+        where("uid", "==", uid),
+        where("tipo", "==", tipo),
+        orderBy("timestamp", "desc"),
+        limit(1)
+      )
+      const querySnapshot = await getDocs(q)
+      if (!querySnapshot.empty) {
+        const bebidaDoc = querySnapshot.docs[0]
+        await deleteDoc(doc(db, "bebidas", bebidaDoc.id))
+      }
+    } catch (error) {
+      console.error("Error eliminando bebida:", error)
+    }
   }
-
-  const eliminarBebida = async (id) => {
-    const ref = doc(db, "bebidas", id)
-    await deleteDoc(ref)
-  }
-
-  const bebidasUsuario = bebidas.filter(b => b.uid === uid)
 
   return (
     <div className="mt-6">
-      <h2 className="text-lg font-bold mb-2">✏️ Editar Mis Bebidas</h2>
-      {bebidasUsuario.length === 0 ? (
-        <p className="text-sm text-gray-600">No tienes bebidas registradas.</p>
-      ) : (
-        <ul className="space-y-2">
-          {bebidasUsuario.map((b) => (
-            <li key={b.id} className="border p-2 rounded">
-              {editandoId === b.id ? (
-                <div className="flex items-center space-x-2">
-                  <select
-                    value={nuevoTipo}
-                    onChange={(e) => setNuevoTipo(e.target.value)}
-                    className="border px-2 py-1 rounded"
-                  >
-                    <option value="Cerveza">Cerveza</option>
-                    <option value="Cubata">Cubata</option>
-                    <option value="Chupito">Chupito</option>
-                  </select>
-                  <button
-                    onClick={() => guardarCambios(b.id)}
-                    className="bg-green-500 text-white px-2 py-1 rounded"
-                  >
-                    Guardar
-                  </button>
-                  <button
-                    onClick={() => setEditandoId(null)}
-                    className="text-sm text-gray-600"
-                  >
-                    Cancelar
-                  </button>
-                </div>
-              ) : (
-                <div className="flex justify-between items-center">
-                  <span>
-                    {b.tipo} — {new Date(b.timestamp).toLocaleTimeString()}
-                  </span>
-                  <div className="space-x-2">
-                    <button
-                      onClick={() => empezarEdicion(b)}
-                      className="text-blue-600 underline text-sm"
-                    >
-                      Editar
-                    </button>
-                    <button
-                      onClick={() => eliminarBebida(b.id)}
-                      className="text-red-600 underline text-sm"
-                    >
-                      Eliminar
-                    </button>
-                  </div>
-                </div>
-              )}
-            </li>
-          ))}
-        </ul>
+      <h2 className="text-lg font-bold mb-2">✏️ Editar Mis Bebidas (Últimas 24h)</h2>
+      {tipos.map((tipo) => {
+        const cantidad = resumenTipos[tipo]?.length || 0
+        return (
+          <div key={tipo} className="flex items-center justify-between border rounded p-2 my-1">
+            <span className="font-semibold">{tipo}s</span>
+            <div className="flex items-center space-x-3">
+              <button
+                onClick={() => eliminarUltimaBebida(tipo)}
+                className="bg-red-500 text-white px-3 py-1 rounded disabled:opacity-50"
+                disabled={cantidad === 0}
+                aria-label={`Eliminar una bebida de tipo ${tipo}`}
+              >
+                -
+              </button>
+              <span className="w-6 text-center">{cantidad}</span>
+              <button
+                onClick={() => añadirBebida(tipo)}
+                className="bg-green-500 text-white px-3 py-1 rounded"
+                aria-label={`Añadir una bebida de tipo ${tipo}`}
+              >
+                +
+              </button>
+            </div>
+          </div>
+        )
+      })}
+      {bebidasUsuario.length === 0 && (
+        <p className="text-sm text-gray-600 mt-4">No tienes bebidas registradas.</p>
       )}
     </div>
   )

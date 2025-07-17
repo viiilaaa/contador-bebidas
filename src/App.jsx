@@ -39,6 +39,7 @@ function App() {
     return () => unsubscribe()
   }, [])
 
+  console.log("Usuarios:", usuarios)
 
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
@@ -135,7 +136,7 @@ function App() {
       )}
 
       {vista === "global" && (
-        <EstadisticasGlobales bebidas={bebidas} />
+        <EstadisticasGlobales bebidas={bebidas} usuarios={usuarios} />
       )}
 
       {vista === "editar" && (

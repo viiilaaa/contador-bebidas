@@ -11,6 +11,7 @@ const bebidas = [
   { id: "kalimotxo", nombre: "kalimotxo" },
   { id: "ron-blanco-limon", nombre: "Ron Blanco - Limón" },
   { id: "ron-energetica", nombre: "Ron - Energética" },
+  { id: "litrona", nombre: "Litrona" },
 ]
 
 function BebidaForm({ onAdd, uid }) {

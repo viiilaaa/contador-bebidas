@@ -7,7 +7,7 @@ function Celebration({ totalBebidas }) {
   const [showConfetti, setShowConfetti] = useState(false);
 
   useEffect(() => {
-    if (totalBebidas === 3 || totalBebidas === 5) {
+    if (totalBebidas % 5 === 0 && totalBebidas > 0) {
       setShowConfetti(true);
       const timer = setTimeout(() => setShowConfetti(false), 5000); // 5 segundos
       return () => clearTimeout(timer);

@@ -28,7 +28,8 @@ const tipos = [
   "ron-naranja",
   "kalimotxo",       // corregido a "kalimotxo" (antes "calimocho" en el objeto)
   "ron-blanco-limon",
-  "ron-energetica"
+  "ron-energetica",
+  "litrona"
 ];
 
 

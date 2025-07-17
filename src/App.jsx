@@ -20,6 +20,7 @@ import RelUsuName from "./components/RelUsuName"
 import EditarGlobal from "./components/EditarGlobal" // nuevo
 import EstadoBorracho from "./components/EstadoBorracho" // nuevo
 import Celebration from "./components/Celebration" // nuevo
+import HatTrick from "./components/hattrick" // nuevo
 
 function App() {
   const [usuario, setUsuario] = useState(null)
@@ -132,6 +133,7 @@ function App() {
           <p className="text-sm text-gray-600 mb-2 text-center">Bienvenido: <RelUsuName email={usuario.email} /></p>
           <BebidaForm onAdd={añadirBebida} uid={usuario.uid} />
           <Celebration totalBebidas={bebidasUsuario.length} />
+          <HatTrick bebidasUsuario={bebidasUsuario} />
           <EstadoBorracho bebidasUsuario={bebidasUsuario} />
           <EstadisticasUsuario bebidas={bebidasUsuario} />
 

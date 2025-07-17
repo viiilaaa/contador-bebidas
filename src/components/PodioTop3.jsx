@@ -20,7 +20,7 @@ function PodioTop3({ resumenUsuarios }) {
             }`}
           >
             <div className="text-3xl">{posiciones[idx]}</div>
-            <div className="text-lg font-semibold mt-2"><RelUsuName email={usuario.email} /></div>
+            <div className="text-lg font-semibold mt-2">{usuario.Nombre}</div>
             <div className="text-sm text-gray-700 mt-1">{usuario.total} bebidas</div>
           </div>
         ))}

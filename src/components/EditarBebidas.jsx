@@ -21,14 +21,15 @@ function EditarBebidas({ bebidas, uid, email }) {
   }, {})
 
   // Tipos permitidos, para no tener que sacar del resumen solo
-  const tipos = [
-    "cerveza",
-    "chupito",
-    "bacardi-limon",
-    "ron-cola",
-    "ron-naranja",
-    "calimocho"
-  ];
+const tipos = [
+  "chupito",
+  "cerveza",
+  "ron-cola",
+  "ron-naranja",
+  "kalimotxo",       // corregido a "kalimotxo" (antes "calimocho" en el objeto)
+  "ron-blanco-limon",
+  "ron-energetica"
+];
 
 
   // Añadir bebida nueva con timestamp actual

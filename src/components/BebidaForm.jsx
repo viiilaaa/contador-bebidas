@@ -6,10 +6,11 @@ import { db } from "../firebase"
 const bebidas = [
   { id: "chupito", nombre: "Chupito" },
   { id: "cerveza", nombre: "Cerveza" },
-  { id: "ron-cola", nombre: "Ron-cola" },
-  { id: "ron-naranja", nombre: "Ron-naranja" },
-  { id: "calimocho", nombre: "Calimocho" },
-  { id: "bacardi-limon", nombre: "Bacardí Limón" },
+  { id: "ron-cola", nombre: "Ron - Cola" },
+  { id: "ron-naranja", nombre: "Ron - Naranja" },
+  { id: "kalimotxo", nombre: "kalimotxo" },
+  { id: "ron-blanco-limon", nombre: "Ron Blanco - Limón" },
+  { id: "ron-energetica", nombre: "Ron - Energética" },
 ]
 
 function BebidaForm({ onAdd, uid }) {

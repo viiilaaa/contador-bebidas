@@ -13,13 +13,13 @@ import { db } from "./firebase"
 
 import Login from "./components/login"
 import BebidaForm from "./components/BebidaForm"
-import BebidaLista from "./components/BebidaLista"
 import EstadisticasGlobales from "./components/StatsGloables"
 import EstadisticasUsuario from "./components/StatsUsuarios" // nuevo
-import EditarBebidas from "./components/EditarBebidas" // nuevo
 import Ranking from "./components/Ranking" // nuevo
 import RelUsuName from "./components/RelUsuName"
 import EditarGlobal from "./components/EditarGlobal" // nuevo
+import EstadoBorracho from "./components/EstadoBorracho" // nuevo
+import Celebration from "./components/Celebration" // nuevo
 
 function App() {
   const [usuario, setUsuario] = useState(null)
@@ -131,7 +131,10 @@ function App() {
         <>
           <p className="text-sm text-gray-600 mb-2 text-center">Bienvenido: <RelUsuName email={usuario.email} /></p>
           <BebidaForm onAdd={añadirBebida} uid={usuario.uid} />
+          <Celebration totalBebidas={bebidasUsuario.length} />
+          <EstadoBorracho bebidasUsuario={bebidasUsuario} />
           <EstadisticasUsuario bebidas={bebidasUsuario} />
+
         </>
       )}
 
